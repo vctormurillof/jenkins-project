@@ -1,2 +1,0 @@
-# jenkins-project
-jenkins-project
