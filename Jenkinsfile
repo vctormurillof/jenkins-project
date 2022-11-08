@@ -2,8 +2,14 @@ pipeline {
     environment {
         PYPI_CREDENTIALS = credentials('Pypi-credentials')
     }
-    triggers {
-        cron('*/2 * * * *')
+    //triggers {
+        //cron('*/2 * * * *')
+    //}
+    options { 
+        disableConcurrentBuilds()
+        ansiColor('xterm')
+        timeout(time: 5, unit: 'MINUTES')
+        timestamps()
     }
     agent {
         label('python')
