@@ -2,6 +2,9 @@ pipeline {
     environment {
         PYPI_CREDENTIALS = credentials('Pypi-credentials')
     }
+    triggers {
+        cron('*/2 * * * *')
+    }
     agent {
         label('python')
     }
