@@ -1,6 +1,7 @@
 pipeline {
     environment {
         PYPI_CREDENTIALS = credentials('Pypi-credentials')
+        DO_COVERAGE = "${BUILD_NUMBER.toInteger() % 2 == 0 ? true : false}"
     }
     //triggers {
         //cron('*/2 * * * *')
@@ -30,9 +31,16 @@ pipeline {
             }
         }
         stage('Coverage') {
-            input {
-                message "Do you want to continue"
-                ok "Yes, continue the pipeline"
+            //input {
+                //message "Do you want to continue"
+                //ok "Yes, continue the pipeline"
+            //}
+            when {
+                allOf {
+                    expression {
+                        return params.DO_COVERAGE
+                    }
+                    branch 'main'
             }
             steps {
                 dir('python-example-app') {
@@ -48,6 +56,9 @@ pipeline {
             }
         }
         stage('Publish') {
+            //when {
+                //branch 'main'
+            //}
             steps {
                 dir('python-example-app') {
                     sh 'python -m twine upload dist/* --skip-existing -u $PYPI_CREDENTIALS_USR -p $PYPI_CREDENTIALS_PSW'
