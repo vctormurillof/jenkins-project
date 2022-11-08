@@ -30,6 +30,10 @@ pipeline {
             }
         }
         stage('Coverage') {
+            input {
+                message "Do you want to continue"
+                ok "Yes, continue the pipeline"
+            }
             steps {
                 dir('python-example-app') {
                     sh 'python -m coverage report -m --fail-under=90'
