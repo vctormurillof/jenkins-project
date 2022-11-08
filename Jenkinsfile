@@ -1,7 +1,7 @@
 pipeline {
     environment {
         PYPI_CREDENTIALS = credentials('Pypi-credentials')
-        DO_COVERAGE = "${BUILD_NUMBER.toInteger() % 2 == 0 ? true : false}"
+        DO_COVERAGE = "${BUILD_NUMBER.toInteger() % 2 != 0 ? 'true' : 'false'}"
     }
     //triggers {
         //cron('*/2 * * * *')
