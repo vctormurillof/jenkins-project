@@ -6,6 +6,9 @@ pipeline {
     //triggers {
         //cron('*/2 * * * *')
     //}
+    parameters {
+        booleanParam(name: 'PACKAGE', defaultValue: true, description: 'Whether you want to package or not')
+    }
     options { 
         disableConcurrentBuilds()
         ansiColor('xterm')
@@ -51,22 +54,27 @@ pipeline {
             }
         }
         stage('Package') {
+            when {
+                expression {
+                    return params.PACKAGE
+                }
+            }
             steps {
                 dir('python-example-app') {
                     sh 'python -m build'
                 }
             }
         }
-        stage('Publish') {
+        //stage('Publish') {
             //when {
                 //branch 'main'
             //}
-            steps {
-                dir('python-example-app') {
-                    sh 'python -m twine upload dist/* --skip-existing -u $PYPI_CREDENTIALS_USR -p $PYPI_CREDENTIALS_PSW'
-                }
-            }
-        }
+            //steps {
+                //dir('python-example-app') {
+                   // sh 'python -m twine upload dist/* --skip-existing -u $PYPI_CREDENTIALS_USR -p $PYPI_CREDENTIALS_PSW'
+                //}
+            //}
+        //}
     }
     post {
         failure {
